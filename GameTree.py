@@ -36,7 +36,7 @@ class GameTree:
         return 1
 
     def ai(self, t):
-        ai_desired_outcome = (t["0"] % 2) + 1
+        ai_desired_outcome = (len(t["0"]) % 2) + 1
         r = [
             m
             for m in [*t]
@@ -48,11 +48,17 @@ class GameTree:
             return letter, t
 
     def __init__(self):
-        with open(r"/Users/benbaily/git/cheekybluff/PileSolver/Scrabble.txt") as f:
+        with open(r"/Users/benbaily/git/Ghostbusters/Scrabble.txt") as f:
             content = f.readlines()
         content = [x.strip() for x in content]
         self.buildTree(content)
         self.getParity(self.tree)
+
+    def mk_alt_tree(self, tree):
+        g = GameTree()
+        g.getParity(tree)
+        g.tree = tree
+        return g
 
 
 if __name__ == "__main__":
@@ -79,12 +85,12 @@ if __name__ == "__main__":
             break
         t = t[i]
         if t.get("FINAL"):
-            print("You lose! You just spelled a word!")
+            print("You lose! You just spelled the word [{}]!".format(t["0"]))
             t = g.tree
             break
         print("After your addition, the word is now [{}]\n".format(t["0"]))
         letter, t = g.ai(t)
-        if not r:
+        if not letter:
             print("I lose! Whoops!\n")
 
         print(
