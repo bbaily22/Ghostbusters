@@ -16,20 +16,20 @@ class GameTree:
                 head["parity"] = (len(a) % 2) + 1
                 head["FINAL"] = True
 
-    def getParity(self, tree):
+    def getParity(tree):
         if tree.get("parity"):
             return tree["parity"]
         keys = [*tree]
         keys.remove("0")
         if len(tree["0"]) % 2 == 0:
             for key in keys:
-                if self.getParity(tree[key]) == 1:
+                if getParity(tree[key]) == 1:
                     tree["parity"] = 1
                     return 1
             tree["parity"] = 2
             return 2
         for key in keys:
-            if self.getParity(tree[key]) == 2:
+            if getParity(tree[key]) == 2:
                 tree["parity"] = 2
                 return 2
         tree["parity"] = 1
@@ -52,13 +52,7 @@ class GameTree:
             content = f.readlines()
         content = [x.strip() for x in content]
         self.buildTree(content)
-        self.getParity(self.tree)
-
-    def mk_alt_tree(self, tree):
-        g = GameTree()
-        g.getParity(tree)
-        g.tree = tree
-        return g
+        getParity(self.tree)
 
 
 if __name__ == "__main__":
