@@ -16,7 +16,7 @@ class GameTree:
                 head["parity"] = (len(a) % 2) + 1
                 head["FINAL"] = True
 
-    def getParity(tree):
+    def getParity(self, tree):
         if tree.get("parity"):
             return tree["parity"]
         keys = [*tree]

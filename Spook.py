@@ -5,7 +5,7 @@ from pdb import set_trace
 import json
 
 
-class PileTree:
+class Spook:
     def __init__(self):
         with open(r"Scrabble.txt") as f:
             content = f.readlines()
@@ -13,29 +13,28 @@ class PileTree:
         self.buildTree(content)
 
     def getParity(self):
-        print(node)
-        for i in range(16,-1,-1):
+        for i in range(16, -1, -1):
             for j in self.stems[i]:
-                if 
+                node = self.leaves[j]
+                if node.get("2", False):
+                    node["3"] = i % 2 + 1
+                else:
+                    keys = [*node]
+                    keys.remove("0")
+                    keys.remove("1")
+                    if i % 2 == 0:
+                        for key in keys:
+                            if self.leaves[node[key]].get("3", None) and self.leaves[node[key]]["3"] == 1:
+                                node["3"] = 1
+                                break
+                        node["3"] = 2
+                    else: 
+                        for key in keys:
+                            if self.leaves[node[key]].get("3", None) and self.leaves[node[key]]["3"] == 2:
+                                node["3"] = 2
+                                break
+                        node["3"] = 1
 
-        if node.get("2"):
-            return node["2"]
-        keys = [*node]
-        keys.remove("0")
-        keys.remove("1")
-        if len(node["0"]) % 2 == 0:
-            for key in keys:
-                if self.getParity(self.leaves[node[key]]) == 1:
-                    node["parity"] = 1
-                    return 1
-            node["parity"] = 2
-            return 2
-        for key in keys:
-            if self.getParity(self.leaves[node[key]]) == 2:
-                node["parity"] = 2
-                return 2
-        node["parity"] = 1
-        return 1
 
     def buildTree(self, content):
         content = {"".join(sorted(a)) for a in content}
@@ -62,12 +61,12 @@ class PileTree:
                 ka = "".join(sorted(k + a))
                 if ka in self.tree:
                     self.tree[k][a] = self.tree[ka]["1"]
-        self.getParity(self.tree["x"])
-        with open("PileTree.txt", "w") as f:
+        self.getParity()
+        with open("Spook.txt", "w") as f:
             json.dump(self.tree, f)
 
 
 if __name__ == "__main__":
-    p = PileTree()
+    p = Spook()
     set_trace()
 
