@@ -16,7 +16,7 @@ class PileTree:
         print(node)
         for i in range(16,-1,-1):
             for j in self.stems[i]:
-                
+                if 
 
         if node.get("2"):
             return node["2"]
