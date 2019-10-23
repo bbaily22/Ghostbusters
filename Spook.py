@@ -20,7 +20,7 @@ class Spook:
                     node["3"] = i % 2 + 1
                     node["4"] = "2"
                 else:
-                    keys = [*node]
+                    keys = [key for key in node]
                     keys.remove("0")
                     keys.remove("1")
                     if i % 2 == 0:
@@ -56,17 +56,43 @@ class Spook:
             if self.minTree.get(key, None):
                 continue
             if self.tree[key].get("4", None):
-                if not self.tree[key]["4"] == "2":
+                if self.tree[key]["4"] == "2":
+                    self.minTree[key] = [None]
+                else:
                     w = "".join(sorted(key + self.tree[key]["4"]))
                     stack.append(w)
                     self.minTree[key] = [w]
             else:
                 self.minTree[key] = []
-                for k in [*self.tree[key]]:
+                for k in self.tree[key]:
                     if k not in ["0", "1", "2", "3", "4"]:
                         w = "".join(sorted(key + k))
                         stack.append(w)
                         self.minTree[key].append(w)
+        for k in self.minTree:
+            for j in k:
+                w = "".join(sorted(k + j))
+                    if w and w not in minTree:
+                        stack.append(w)
+        while stack:
+            key = stack.pop()
+            if self.minTree.get(key, None):
+                continue
+            if self.tree[key].get("4", None):
+                if self.tree[key]["4"] == "2":
+                    self.minTree[key] = [None]
+                else:
+                    w = "".join(sorted(key + self.tree[key]["4"]))
+                    stack.append(w)
+                    self.minTree[key] = [w]
+            else:
+                self.minTree[key] = []
+                for k in self.tree[key]:
+                    if k not in ["0", "1", "2", "3", "4"]:
+                        w = "".join(sorted(key + k))
+                        stack.append(w)
+                        self.minTree[key].append(w)
+        
 
     def buildTree(self, content):
         content = {"".join(sorted(a)) for a in content}
@@ -98,6 +124,12 @@ class Spook:
 
 
 if __name__ == "__main__":
-    s = Spook("Scrabble.txt")
+    with open("Spook.txt", "r") as f:
+        minTree = json.load(f)
+    BAD = set([])
+    for k in minTree:
+        for j in k:
+            w = "".join(sorted(k + j))
+            if w and w not in minTree:
+                BAD.add(w)
     set_trace()
-
