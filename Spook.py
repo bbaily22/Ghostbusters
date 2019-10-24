@@ -129,14 +129,20 @@ class Spook:
 
 
 if __name__ == "__main__":
-    s = Spook("Scrabble.txt")
-    try:
-        for i in s.minTree:
-            for j in s.minTree[i]:
-                if j:
-                    w = "".join(sorted(i + j))
-                    if w not in s.minTree:
-                        raise Exception(w)
-    except Exception:
-        pass
-    set_trace()
+   	with open("Spook.txt", "r") as f:
+		m = json.load(f)
+	word = u"x"
+	while 1:
+		L = m.get(word, None)
+		print("{} {}".format(word, L))
+		letter = raw_input("Input a valid uppercase character, 0 to reset, 1 to break: ")
+		letter = unicode(letter, "utf-8")
+		if letter == "0":
+			word = u"x"
+			continue
+		if letter == "1":
+			break
+		word = "".join(sorted(word + letter))
+		
+		
+		
